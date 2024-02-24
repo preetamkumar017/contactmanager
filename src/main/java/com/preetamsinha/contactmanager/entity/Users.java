@@ -7,34 +7,45 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import javax.annotation.processing.Generated;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="users", indexes={@Index(name="users_email_IX", columnList="email", unique=true)})
+@Table(name="users")
 public class Users implements Serializable {
 
     /** Primary key. */
     protected static final String PK = "id";
 
     @Id
-    @Column(unique=true, nullable=false, precision=10)
+    @Column(nullable=false, precision=10)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(length=500)
     private String about;
     @Column(unique=true, length=255)
+    @NotBlank(message = "Can not be empty")
     private String email;
     @Column(nullable=false, length=1)
     private boolean enabled;
     @Column(name="image_url", length=255)
     private String imageUrl;
     @Column(length=255)
+    @Size(min = 2,max = 20,message = "min 2 char and max 20char allowed")
+    @NotBlank(message = "Can not be empty")
     private String name;
     @Column(length=255)
+    @NotBlank(message = "Can not be empty")
     private String password;
     @Column(length=255)
     private String role;
@@ -259,13 +270,7 @@ public class Users implements Serializable {
      *
      * @return String representation of this instance
      */
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer("[Users |");
-        sb.append(" id=").append(getId());
-        sb.append("]");
-        return sb.toString();
-    }
+   
 
     /**
      * Return all elements of the primary key.
@@ -278,4 +283,12 @@ public class Users implements Serializable {
         return ret;
     }
 
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", about=" + about + ", email=" + email + ", enabled=" + enabled + ", imageUrl="
+				+ imageUrl + ", name=" + name + ", password=" + password + ", role=" + role + ", contact=" + contact
+				+ "]";
+	}
+
+    
 }
